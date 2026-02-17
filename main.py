@@ -45,8 +45,10 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
         buttons = [[InlineKeyboardButton(n, url=l)]
                    for n, l in data["categories"][cat].items()]
         buttons.append([InlineKeyboardButton("⬅️ رجوع", callback_data="back")])
-        await query.edit_message_text(f"اختر من {cat}",
-            reply_markup=InlineKeyboardMarkup(buttons))
+        await query.edit_message_text(
+            f"اختر من {cat}",
+            reply_markup=InlineKeyboardMarkup(buttons)
+        )
 
     elif query.data == "back":
         await query.edit_message_text(
@@ -64,8 +66,10 @@ async def button(update: Update, context: ContextTypes.DEFAULT_TYPE):
             [InlineKeyboardButton("✏️ تعديل رسالة الترحيب", callback_data="edit_welcome")],
             [InlineKeyboardButton("⬅️ رجوع", callback_data="back")]
         ]
-        await query.edit_message_text("لوحة التحكم:",
-            reply_markup=InlineKeyboardMarkup(keyboard))
+        await query.edit_message_text(
+            "لوحة التحكم:",
+            reply_markup=InlineKeyboardMarkup(keyboard)
+        )
 
     else:
         user_state[uid] = query.data
@@ -129,8 +133,19 @@ async def text_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     del user_state[uid]
 
+
+# ✅ هنا التعديل الوحيد (زر Start دائم + Menu دائم)
 async def set_menu(app):
-    await app.bot.set_chat_menu_button(menu_button=MenuButtonCommands())
+    # زر start دائم
+    await app.bot.set_my_commands([
+        ("start", "بدء البوت")
+    ])
+
+    # زر Menu دائم تحت الدردشة
+    await app.bot.set_chat_menu_button(
+        menu_button=MenuButtonCommands()
+    )
+
 
 app = Application.builder().token(TOKEN).build()
 app.post_init = set_menu
