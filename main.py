@@ -1,4 +1,5 @@
 import json
+import os
 from telegram import (
     Update, InlineKeyboardButton, InlineKeyboardMarkup, MenuButtonCommands
 )
@@ -6,7 +7,9 @@ from telegram.ext import (
     Application, CommandHandler, CallbackQueryHandler,
     MessageHandler, filters, ContextTypes
 )
-from config import TOKEN, ADMINS
+from config import ADMINS
+
+TOKEN = os.getenv("TOKEN")
 
 user_state = {}
 
